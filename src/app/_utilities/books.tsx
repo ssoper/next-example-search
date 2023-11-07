@@ -1,15 +1,17 @@
 import path from 'path'
-import { readFile } from 'fs/promises'
+import { readFile, writeFile } from 'fs/promises'
 
 export class Book {
   title: string
   author: string
   slug: string
+  cover: string
 
   constructor(title: string, author: string, slug: string) {
     this.title = title
     this.author = author
     this.slug = slug
+    this.cover = `/books/${slug}.jpg`
   }
 }
 
@@ -30,4 +32,34 @@ export const findBook = async (slug: string): Promise<Book | undefined> => {
 export const getContent = async (slug: string): Promise<string> => {
   const file = path.join(process.cwd(), 'books', `${slug}.txt`)
   return await readFile(file, 'utf8')
+}
+
+export class Document {
+  title: string
+  slug: string
+  section: string
+
+  constructor(title: string, slug: string, section: string) {
+    this.title = title
+    this.slug = slug
+    this.section = section
+  }
+}
+
+export const generateSearchDocuments = async (books: Book[]) => {
+  const outputPath = `${process.cwd()}/public/documents.json`
+
+  const documents = (
+    await Promise.all(
+      books.map(async (book: Book) =>
+        (await getContent(book.slug))
+          .split('\n')
+          .map(
+            (section: string) => new Document(book.title, book.slug, section)
+          )
+      )
+    )
+  ).flat()
+
+  await writeFile(outputPath, JSON.stringify(documents))
 }
