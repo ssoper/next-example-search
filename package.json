@@ -5,13 +5,14 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "clean": "rm -rf .next",
+    "clean": "rm -rf .next public/documents.json",
     "start": "next start",
     "lint": "next lint",
     "pretty": "yarn prettier -c .",
     "pretty:fix": "yarn prettier -w ."
   },
   "dependencies": {
+    "minisearch": "^6.2.0",
     "next": "14.0.1",
     "prettier": "^3.0.3",
     "react": "^18",

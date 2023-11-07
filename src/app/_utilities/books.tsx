@@ -39,13 +39,13 @@ export class Document {
   id: string
   title: string
   slug: string
-  section: string
+  text: string
 
-  constructor(title: string, slug: string, section: string) {
+  constructor(title: string, slug: string, text: string) {
     this.id = randomUUID()
     this.title = title
     this.slug = slug
-    this.section = section
+    this.text = text
   }
 }
 
@@ -57,9 +57,7 @@ export const generateSearchDocuments = async (books: Book[]) => {
       books.map(async (book: Book) =>
         (await getContent(book.slug))
           .split('\n')
-          .map(
-            (section: string) => new Document(book.title, book.slug, section)
-          )
+          .map((text: string) => new Document(book.title, book.slug, text))
       )
     )
   ).flat()
