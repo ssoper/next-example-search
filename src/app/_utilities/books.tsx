@@ -1,5 +1,6 @@
 import path from 'path'
 import { readFile, writeFile } from 'fs/promises'
+import { randomUUID } from 'crypto'
 
 export class Book {
   title: string
@@ -35,11 +36,13 @@ export const getContent = async (slug: string): Promise<string> => {
 }
 
 export class Document {
+  id: string
   title: string
   slug: string
   section: string
 
   constructor(title: string, slug: string, section: string) {
+    this.id = randomUUID()
     this.title = title
     this.slug = slug
     this.section = section
